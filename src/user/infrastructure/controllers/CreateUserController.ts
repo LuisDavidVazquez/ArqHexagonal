@@ -11,6 +11,7 @@ export class CreateUserController {
       const user = await this.createUserUseCase.run(
         data.name,
         data.email,
+        data.password 
       );
 
       if (user)
@@ -20,7 +21,8 @@ export class CreateUserController {
           data: {
             id: user?.id,
             name: user?.name,
-            email: user?.email
+            email: user?.email,
+            password: user?.password
           },
         });
       else

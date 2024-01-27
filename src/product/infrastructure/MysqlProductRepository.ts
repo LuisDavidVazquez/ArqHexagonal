@@ -3,6 +3,7 @@ import { Product } from "../domain/Product";
 import { ProductRepository } from "../domain/ProductRepository";
 
 export class MysqlProductRepository implements ProductRepository {
+
   async getAll(): Promise<Product[] | null> {
     const sql = "SELECT * FROM product";
     try {
@@ -37,6 +38,30 @@ export class MysqlProductRepository implements ProductRepository {
       /*No es necesaria la validación de la cantidad de filas afectadas, ya que, al
             estar dentro de un bloque try/catch si hay error se captura en el catch */
       return new Product(result.insertId, name, description, price);
+    } catch (error) {
+      return null;
+    }
+  }
+
+  //New method
+  async getById(id : number): Promise<Product[] | null> {
+    const sql = "SELECT * FROM product where id=?";
+
+    const params: any[] = [id];
+
+    try {
+      const [data]: any = await query(sql, params);
+      const dataProducts = Object.values(JSON.parse(JSON.stringify(data)));
+
+      return dataProducts.map(
+        (product: any) =>
+          new Product(
+            product.id,
+            product.name,
+            product.description,
+            product.price
+          )
+      );
     } catch (error) {
       return null;
     }

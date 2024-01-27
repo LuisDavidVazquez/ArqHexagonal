@@ -1,19 +1,20 @@
 import { Request, Response } from "express";
 
-import { GetAllUserUseCase } from "../../application/GetAllUsersUseCase";
+import { GetByIdUserUseCase } from "../../application/GetByIdUserUseCase";
 
-export class GetAllUserController {
-  constructor(readonly getAllUserUseCase: GetAllUserUseCase) {}
+export class GetByIdUserController {
+  constructor(readonly getByIdUserUseCase: GetByIdUserUseCase) {}
 
   async run(req: Request, res: Response) {
+    const id : number = parseInt(req.params.id)
     try {
-      const users = await this.getAllUserUseCase.run();
-      console.log(users);
-      if (users)
+      const user = await this.getByIdUserUseCase.run(id);
+      console.log(user);
+      if (user)
         //Code HTTP : 200 -> Consulta exitosa
         res.status(200).send({
           status: "success",
-          data: users.map((user: any) => {
+          data: user.map((user: any) => {
             return {
               id: user.id,
               name: user.name,

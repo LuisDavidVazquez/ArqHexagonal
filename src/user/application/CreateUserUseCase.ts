@@ -7,11 +7,13 @@ export class CreateUserUseCase {
   async run(
     name: string,
     email: string,
+    password: string
   ): Promise<User | null> {
     try {
       const user = await this.userRepository.createUser(
         name,
-        email
+        email,
+        password
       );
       return user;
     } catch (error) {
