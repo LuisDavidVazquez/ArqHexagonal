@@ -1,14 +1,16 @@
 import { INotificationService } from "../../application/services/INotificationService";
 import ampqlib from "amqplib"
 
+const url = process.env.AMQP_URL ;
 
 export class NotificationHelpers implements INotificationService {
 
     providerChannel : ampqlib.Channel | undefined;
 
     async inicializar () {
+        if(!url) return false
         try {
-            const connection = await ampqlib.connect("amqps://elujeguw:mqOd03pR0GE6x6gaxFKu1luxjhJkO-BF@shrimp.rmq.cloudamqp.com/elujeguw")
+            const connection = await ampqlib.connect(url)
             this.providerChannel = await connection.createChannel()
             this.providerChannel.assertQueue("channel1")
             console.log("Conexion exitosa");
