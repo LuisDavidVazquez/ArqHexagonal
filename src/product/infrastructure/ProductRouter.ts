@@ -11,15 +11,15 @@ export const productRouter = express.Router();
 productRouter.get(
   "/",
   getAllProductController.run.bind(getAllProductController)
-);
+);  
 productRouter.post(
   "/",
   createProductController.run.bind(createProductController)
 );
-
 
 //New route
 productRouter.get(
   "/:id",
   getByIdProductController.run.bind(getByIdProductController)
 );
+

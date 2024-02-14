@@ -1,17 +1,21 @@
 import { Request, Response } from "express";
-
 import { CreateUserUseCase } from "../../application/CreateUserUseCase";
+import { EncryptServiceHelpers } from "../helpers/EncryptServiceHelpers";
 
 export class CreateUserController {
-  constructor(readonly createUserUseCase: CreateUserUseCase) {}
+  constructor(readonly createUserUseCase: CreateUserUseCase, readonly encryptService : EncryptServiceHelpers ) {}
 
   async run(req: Request, res: Response) {
     const data = req.body;
+    
+    const passCrypted = this.encryptService.encryptService(
+      data.password
+    );
     try {
       const user = await this.createUserUseCase.run(
         data.name,
         data.email,
-        data.password 
+        passCrypted 
       );
 
       if (user)
@@ -22,7 +26,7 @@ export class CreateUserController {
             id: user?.id,
             name: user?.name,
             email: user?.email,
-            password: user?.password
+            password : passCrypted
           },
         });
       else
